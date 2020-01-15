@@ -2,6 +2,10 @@
 
 ezbunt is a Go module for conveniently interacting with a [buntdb](https://github.com/tidwall/buntdb).  Functions include: creating a data file, storing simple data types, and complex types as JSON objects.
 
+## Documentation
+
+[godoc.org/github.com/racecarparts/ezbunt](https://godoc.org/github.com/racecarparts/ezbunt)
+
 ## Usage
 
 via: `go.mod` (go module):
@@ -31,7 +35,7 @@ import (
 )
 
 func main() {
-    ez := ez.NewEzbunt("date.file")
+    ez := ez.NewEzbunt("data.file")
     ez.WriteKeyVal("my:1234", "sharona")
 
     pairs, err := ez.GetPairs("my")
