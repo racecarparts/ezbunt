@@ -13,7 +13,7 @@ via: `go.mod` (go module):
 ```text
 require (
     ...
-    github.com/racecarparts/ezbunt v0.1.1
+    github.com/racecarparts/ezbunt v0.1.2
 )
 ```
 
