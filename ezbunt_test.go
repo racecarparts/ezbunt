@@ -140,3 +140,26 @@ func TestGetPairs(t *testing.T) {
 	is.Equal(len(foods), 2)      // expect 2 foods
 	is.Equal(len(sensations), 2) // expect 2 sensations
 }
+
+func TestDeleteKey(t *testing.T) {
+	dbFilePath := setup(t)
+	defer teardown(dbFilePath, t)
+	ez := NewEzbunt(dbFilePath)
+
+	ez.WriteKeyVal("oompa", "loompa")
+
+	is := is.New(t)
+	val, err := ez.GetVal("oompa")
+
+	is.NoErr(err)           // expect no error
+	is.Equal(val, "loompa") // expect equal
+
+	val, err = ez.DeleteKey("oompa")
+	is.NoErr(err)           // expect no error
+	is.Equal(val, "loompa") // expect equal
+
+	val, err = ez.GetVal("oompa")
+	is.True(err != nil) // expect error
+	is.True(val == "")  // expect zero val string
+
+}

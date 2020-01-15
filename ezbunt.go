@@ -187,6 +187,7 @@ func (ez *Ezbunt) GetValAsBoolDefault(key string, defaultVal bool) bool {
 	return val
 }
 
+// GetPairs retrieves a map of key-value pairs based on a key prefix
 func (ez *Ezbunt) GetPairs(keyPrefix string) (map[string]string, error) {
 	db := ez.db
 	pairs := make(map[string]string, 0)
@@ -204,6 +205,7 @@ func (ez *Ezbunt) GetPairs(keyPrefix string) (map[string]string, error) {
 	return pairs, err
 }
 
+// DeleteKey removes a key-value pair and returns the value of the removed key
 func (ez *Ezbunt) DeleteKey(key string) (string, error) {
 	db := ez.db
 
