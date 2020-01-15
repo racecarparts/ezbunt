@@ -29,7 +29,7 @@ func teardown(dbFilePath string, t *testing.T) {
 func TestNewDB(t *testing.T) {
 	dbFilePath := setup(t)
 	defer teardown(dbFilePath, t)
-	ez := NewEzbunt(dbFilePath)
+	ez := New(dbFilePath)
 
 	is := is.New(t)
 
@@ -40,7 +40,7 @@ func TestNewDB(t *testing.T) {
 func TestWriteKeyVal(t *testing.T) {
 	dbFilePath := setup(t)
 	defer teardown(dbFilePath, t)
-	ez := NewEzbunt(dbFilePath)
+	ez := New(dbFilePath)
 
 	kStr := "Gummer"
 	wantVal := "Gormley"
@@ -56,7 +56,7 @@ func TestWriteKeyVal(t *testing.T) {
 func TestWriteKeyValAsInt(t *testing.T) {
 	dbFilePath := setup(t)
 	defer teardown(dbFilePath, t)
-	ez := NewEzbunt(dbFilePath)
+	ez := New(dbFilePath)
 
 	kStr := "purpose"
 	wantVal := 42
@@ -75,7 +75,7 @@ func TestWriteKeyValAsInt(t *testing.T) {
 func TestWriteKeyValBool(t *testing.T) {
 	dbFilePath := setup(t)
 	defer teardown(dbFilePath, t)
-	ez := NewEzbunt(dbFilePath)
+	ez := New(dbFilePath)
 
 	kStr := "all"
 	wantVal := true
@@ -94,7 +94,7 @@ func TestWriteKeyValBool(t *testing.T) {
 func TestWriteKeyValTTL(t *testing.T) {
 	dbFilePath := setup(t)
 	defer teardown(dbFilePath, t)
-	ez := NewEzbunt(dbFilePath)
+	ez := New(dbFilePath)
 
 	kStr := "Gummer"
 	vStr := "Gormley"
@@ -111,7 +111,7 @@ func TestWriteKeyValTTL(t *testing.T) {
 func TestGetPairs(t *testing.T) {
 	dbFilePath := setup(t)
 	defer teardown(dbFilePath, t)
-	ez := NewEzbunt(dbFilePath)
+	ez := New(dbFilePath)
 
 	pairs := make(map[string]string)
 	pairs["dance:harlem"] = "shake"

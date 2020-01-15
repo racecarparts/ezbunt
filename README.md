@@ -35,7 +35,7 @@ import (
 )
 
 func main() {
-    ez := ez.NewEzbunt("data.file")
+    ez := ez.New("data.file")
     ez.WriteKeyVal("my:1234", "sharona")
 
     pairs, err := ez.GetPairs("my")
