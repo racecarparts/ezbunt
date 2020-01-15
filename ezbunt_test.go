@@ -144,7 +144,7 @@ func TestGetPairs(t *testing.T) {
 func TestDeleteKey(t *testing.T) {
 	dbFilePath := setup(t)
 	defer teardown(dbFilePath, t)
-	ez := NewEzbunt(dbFilePath)
+	ez := New(dbFilePath)
 
 	ez.WriteKeyVal("oompa", "loompa")
 
