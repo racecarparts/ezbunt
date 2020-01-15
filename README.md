@@ -9,7 +9,7 @@ via: `go.mod` (go module):
 ```text
 require (
     ...
-    github.com/racecarparts/ezbunt v0.1.0
+    github.com/racecarparts/ezbunt v0.1.1
 )
 ```
 
