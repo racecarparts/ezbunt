@@ -117,6 +117,32 @@ func (ez *Ezbunt) GetVal(key string) (string, error) {
 	return theVal, err
 }
 
+// GetValAsInt retrieves the value as an `int` type, and possible error, for the corresponding key.
+func (ez *Ezbunt) GetValAsInt(key string) (int, error) {
+	val, err := ez.GetVal(key)
+	if err != nil {
+		return 0, err
+	}
+	valAsInt, convErr := strconv.Atoi(val)
+	if convErr != nil {
+		return 0, err
+	}
+	return valAsInt, nil
+}
+
+// GetValAsBool retrieves the value as a `bool` type, and possible error, for the corresponding key.
+func (ez *Ezbunt) GetValAsBool(key string) (bool, error) {
+	val, err := ez.GetVal(key)
+	if err != nil {
+		return false, err
+	}
+	valAsBool, convErr := strconv.ParseBool(val)
+	if convErr != nil {
+		return valAsBool, err
+	}
+	return valAsBool, nil
+}
+
 // GetValAsBytes retrieves the value as []byte, and possible error, for the corresponding key.  Useful for
 // retrieving JSON objects.
 func (ez *Ezbunt) GetValAsBytes(key string) ([]byte, error) {
@@ -133,6 +159,28 @@ func (ez *Ezbunt) GetValAsBytes(key string) ([]byte, error) {
 // from the db, the provided default is returned.
 func (ez *Ezbunt) GetValDefault(key string, defaultVal string) string {
 	val, err := ez.GetVal(key)
+	if err != nil {
+		return defaultVal
+	}
+	return val
+}
+
+// GetValAsIntDefault retrieves the value for the corresponding key.
+// If the key is not found, the value is not found, or an error is returned
+// from the db, the provided default is returned.
+func (ez *Ezbunt) GetValAsIntDefault(key string, defaultVal int) int {
+	val, err := ez.GetValAsInt(key)
+	if err != nil {
+		return defaultVal
+	}
+	return val
+}
+
+// GetValAsBoolDefault retrieves the value for the corresponding key.
+// If the key is not found, the value is not found, or an error is returned
+// from the db, the provided default is returned.
+func (ez *Ezbunt) GetValAsBoolDefault(key string, defaultVal bool) bool {
+	val, err := ez.GetValAsBool(key)
 	if err != nil {
 		return defaultVal
 	}

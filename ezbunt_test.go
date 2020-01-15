@@ -51,7 +51,44 @@ func TestWriteKeyVal(t *testing.T) {
 	got, err := ez.GetVal(kStr)
 	is.NoErr(err)
 	is.Equal(got, wantVal) // expect to be equal
+}
 
+func TestWriteKeyValAsInt(t *testing.T) {
+	dbFilePath := setup(t)
+	defer teardown(dbFilePath, t)
+	ez := NewEzbunt(dbFilePath)
+
+	kStr := "purpose"
+	wantVal := 42
+	err := ez.WriteKeyValAsInt(kStr, wantVal)
+	is := is.New(t)
+	is.NoErr(err) // expect no error
+
+	got, err := ez.GetValAsInt(kStr)
+	is.NoErr(err)
+	is.Equal(got, wantVal) // expect to be equal
+
+	got = ez.GetValAsIntDefault("horse", 42)
+	is.Equal(got, 42) // expect to get default
+}
+
+func TestWriteKeyValBool(t *testing.T) {
+	dbFilePath := setup(t)
+	defer teardown(dbFilePath, t)
+	ez := NewEzbunt(dbFilePath)
+
+	kStr := "all"
+	wantVal := true
+	err := ez.WriteKeyValAsBool(kStr, wantVal)
+	is := is.New(t)
+	is.NoErr(err) // expect no error
+
+	got, err := ez.GetValAsBool(kStr)
+	is.NoErr(err)
+	is.Equal(got, wantVal) // expect to be equal
+
+	got = ez.GetValAsBoolDefault("horse", true)
+	is.Equal(got, true) // expect to get default
 }
 
 func TestWriteKeyValTTL(t *testing.T) {
@@ -69,4 +106,37 @@ func TestWriteKeyValTTL(t *testing.T) {
 	if err == nil {
 		t.Fail()
 	}
+}
+
+func TestGetPairs(t *testing.T) {
+	dbFilePath := setup(t)
+	defer teardown(dbFilePath, t)
+	ez := NewEzbunt(dbFilePath)
+
+	pairs := make(map[string]string)
+	pairs["dance:harlem"] = "shake"
+	pairs["food:milk"] = "shake"
+	pairs["dance:mashed"] = "potato"
+	pairs["food:mashed"] = "potato"
+	pairs["dance:cabbage"] = "patch"
+	pairs["sensation:cabbage"] = "patch"
+	pairs["sensation:rick"] = "astley"
+
+	for k, v := range pairs {
+		ez.WriteKeyVal(k, v)
+	}
+
+	is := is.New(t)
+	dances, err := ez.GetPairs("dance")
+	is.NoErr(err) // expect no error
+
+	foods, err := ez.GetPairs("food")
+	is.NoErr(err) // expect no error
+
+	sensations, err := ez.GetPairs("sensation")
+	is.NoErr(err) // expect no error
+
+	is.Equal(len(dances), 3)     // expect 3 dances
+	is.Equal(len(foods), 2)      // expect 2 foods
+	is.Equal(len(sensations), 2) // expect 2 sensations
 }
