@@ -15,19 +15,14 @@ type Ezbunt struct {
 	db *buntdb.DB
 }
 
-// NewEzbunt creates and returns an Ezbunt with a new buntdb (with a backing file at the path provided)
-func NewEzbunt(dbFilePath string) *Ezbunt {
-	ez := &Ezbunt{}
-	if ez.db == nil {
-		newDB, err := buntdb.Open(dbFilePath)
-		if err != nil {
-			log.Fatal("Could not open data file path", err)
-			return ez
-		}
-		ez.db = newDB
+// New creates and returns an Ezbunt with a new buntdb (with a backing file at the path provided)
+func New(dbFilePath string) *Ezbunt {
+	newDB, err := buntdb.Open(dbFilePath)
+	if err != nil {
+		log.Fatal("Could not open data file path", err)
+		return nil
 	}
-
-	return ez
+	return &Ezbunt{db: newDB}
 }
 
 // WriteKeyVal persists a key-value string pair indefinitley
