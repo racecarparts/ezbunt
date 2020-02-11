@@ -57,7 +57,7 @@ func (ez *Ezbunt) WriteKeyValAsInt(key string, val int) error {
 	return ez.WriteKeyVal(key, valAsStr)
 }
 
-// WriteKeyValAsIntTTL persists a key-value string/int pair wit a ttl in seconds
+// WriteKeyValAsIntTTL persists a key-value string/int pair with a TTL in seconds
 func (ez *Ezbunt) WriteKeyValAsIntTTL(key string, val int, ttlSeconds int) error {
 	valAsStr := strconv.Itoa(val)
 	return ez.WriteKeyValTTL(key, valAsStr, ttlSeconds)
@@ -69,9 +69,21 @@ func (ez *Ezbunt) WriteKeyValAsBool(key string, val bool) error {
 	return ez.WriteKeyVal(key, valAsStr)
 }
 
-// WriteKeyValAsBoolTTL persists a key-value string/bool pair indefinitley
+// WriteKeyValAsBoolTTL persists a key-value string/bool pair with a TTL in seconds
 func (ez *Ezbunt) WriteKeyValAsBoolTTL(key string, val bool, ttlSeconds int) error {
 	valAsStr := strconv.FormatBool(val)
+	return ez.WriteKeyValTTL(key, valAsStr, ttlSeconds)
+}
+
+// WriteKeyValAsTime persists a key-value string/time.Time pair indefinitley
+func (ez *Ezbunt) WriteKeyValAsTime(key string, val time.Time) error {
+	valAsStr := val.Format(time.RFC3339Nano)
+	return ez.WriteKeyVal(key, valAsStr)
+}
+
+// WriteKeyValAsTimeTTL persists a key-value string/time.Time pair with a TTL in seconds
+func (ez *Ezbunt) WriteKeyValAsTimeTTL(key string, val time.Time, ttlSeconds int) error {
+	valAsStr := val.String()
 	return ez.WriteKeyValTTL(key, valAsStr, ttlSeconds)
 }
 
@@ -138,6 +150,20 @@ func (ez *Ezbunt) GetValAsBool(key string) (bool, error) {
 	return valAsBool, nil
 }
 
+// GetValAsTime retrieves the value as a `time.Time` type, and possible error, for the corresponding key.
+func (ez *Ezbunt) GetValAsTime(key string) (time.Time, error) {
+	val, err := ez.GetVal(key)
+	if err != nil {
+		return time.Time{}, err
+	}
+	var timeVal time.Time
+	timeVal, err = time.Parse(time.RFC3339Nano, val)
+	if err != nil {
+		return timeVal, err
+	}
+	return timeVal, nil
+}
+
 // GetValAsBytes retrieves the value as []byte, and possible error, for the corresponding key.  Useful for
 // retrieving JSON objects.
 func (ez *Ezbunt) GetValAsBytes(key string) ([]byte, error) {
@@ -176,6 +202,17 @@ func (ez *Ezbunt) GetValAsIntDefault(key string, defaultVal int) int {
 // from the db, the provided default is returned.
 func (ez *Ezbunt) GetValAsBoolDefault(key string, defaultVal bool) bool {
 	val, err := ez.GetValAsBool(key)
+	if err != nil {
+		return defaultVal
+	}
+	return val
+}
+
+// GetValAsTimeDefault retrieves the value for the corresponding key.
+// If the key is not found, the value is not found, or an error is returned
+// from the db, the provided default is returned.
+func (ez *Ezbunt) GetValAsTimeDefault(key string, defaultVal time.Time) time.Time {
+	val, err := ez.GetValAsTime(key)
 	if err != nil {
 		return defaultVal
 	}

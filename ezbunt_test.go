@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/matryer/is"
 )
@@ -89,6 +90,29 @@ func TestWriteKeyValBool(t *testing.T) {
 
 	got = ez.GetValAsBoolDefault("horse", true)
 	is.Equal(got, true) // expect to get default
+}
+
+func TestWriteKeyValTime(t *testing.T) {
+	dbFilePath := setup(t)
+	defer teardown(dbFilePath, t)
+	ez := New(dbFilePath)
+
+	now := time.Now()
+
+	kStr := "Cindy"
+	wantVal := now.UTC()
+	err := ez.WriteKeyValAsTime(kStr, wantVal)
+
+	is := is.New(t)
+
+	is.NoErr(err) // expect no error on write
+
+	got, err := ez.GetValAsTime(kStr)
+	is.NoErr(err)          // expect no error on GetValAsTime
+	is.Equal(got, wantVal) // expect to be equal
+
+	got = ez.GetValAsTimeDefault("Lauper", now.UTC())
+	is.Equal(got, now.UTC()) // expect to get default
 }
 
 func TestWriteKeyValTTL(t *testing.T) {
